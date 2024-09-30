@@ -1,10 +1,13 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "rootDir": "backend/src",
-    "outDir": "./dist",
+    "target": "es6", // or your preferred version
+    "module": "commonjs",
     "strict": true,
-    "esModuleInterop": true
-  }
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["jest", "node"] // Add this line
+  },
+  "include": ["src/**/*.ts", "__tests__/**/*.ts"], // Include your source and test files
+  "exclude": ["node_modules"]
 }
