@@ -24,3 +24,9 @@ export const selectAllEvents = () => {
     return result.rows;
   });
 };
+
+export const selectEventById = (id: Number) => {
+  return pool.query("SELECT * FROM events WHERE id = $1", [id]).then((result: { rows: [] })=>{
+    return result.rows
+  })
+}

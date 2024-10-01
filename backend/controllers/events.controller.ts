@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { insertNewEvent, selectAllEvents } from "../models/events.model";
+import { insertNewEvent, selectAllEvents , selectEventById} from "../models/events.model";
+import {MappedEvent} from "../db/getEventData"
 
 export const postNewEvent = (req: Request, res: Response) => {
   insertNewEvent(req.body)
@@ -20,3 +21,12 @@ export const getAllEvents = (req: Request, res: Response) => {
       res.status(500).send({ msg: "Could not find Events" });
     });
 };
+
+export const getEventById = (req: Request, res: Response) => {
+  const id: number = parseInt(req.params.id)
+  selectEventById(id).then((event: any)=>{
+    res.status(200).send({event: event[0]})
+  }).catch((err:Error) => {
+    res.status(500).send({err})
+  })
+}

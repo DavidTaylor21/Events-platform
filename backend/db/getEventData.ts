@@ -32,7 +32,7 @@ interface Event {
   };
 }
 
-interface MappedEvent {
+export interface MappedEvent {
   eventName: string;
   eventLocation: string;
   eventTime: string;
