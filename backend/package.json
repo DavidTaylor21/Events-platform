@@ -22,8 +22,9 @@
   "scripts": {
     "start": "node dist/app.js",
     "build": "tsc",
-    "dev": "nodemon src/app.ts",
+    "dev": "nodemon src/listen.ts",
     "setup-dbs": "psql -f ./db/setup.sql",
-    "test": "jest"
+    "test": "jest",
+    "seed" : "ts-node db/seed.ts"
   }
 }

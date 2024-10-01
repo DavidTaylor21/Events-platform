@@ -1,11 +1,6 @@
 import express, { Request, Response } from "express";
-import dotenv from "dotenv";
-
-dotenv.config();
-
+import { postNewEvent, getAllEvents } from "../controllers/events.controller";
 const app = express();
-
-const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
 
 app.use(express.json());
 
@@ -13,5 +8,9 @@ app.get("/", (request: Request, response: Response) => {
   response.status(200).send("Hello World");
 });
 
+app.post("/events", postNewEvent);
+app.get("/events", getAllEvents);
 
-export default app
+
+
+export default app;

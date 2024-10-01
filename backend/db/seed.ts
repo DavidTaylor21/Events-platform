@@ -33,7 +33,7 @@ async function seedEvents() {
         event.eventName,                    
         event.eventLocation,               
         new Date(event.eventTime),  
-        parseFloat(event.price), 
+        event.price, 
         event.capacity
       ];
       
