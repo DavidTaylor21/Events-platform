@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { postNewEvent, getAllEvents, getEventById } from "../controllers/events.controller";
+import { postNewEvent, getAllEvents, getEventById , postUserToEvent} from "../controllers/events.controller";
 import {postNewUser} from "../controllers/users.controller"
 const app = express();
 
@@ -12,6 +12,7 @@ app.get("/", (request: Request, response: Response) => {
 app.post("/events", postNewEvent);
 app.get("/events", getAllEvents);
 app.get("/events/:id", getEventById)
+app.post("/events/:id/register", postUserToEvent)
 
 app.post("/users", postNewUser)
 

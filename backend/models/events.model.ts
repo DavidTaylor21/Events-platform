@@ -30,3 +30,14 @@ export const selectEventById = (id: Number) => {
     return result.rows
   })
 }
+
+export const insertUserToEvent= (user_id: Number, event_id: Number) => {
+  const queryStr = `INSERT INTO user_events (user_id, event_id) VALUES ($1, $2) 
+   ON CONFLICT (user_id, event_id) DO NOTHING;`;
+
+    const values = [user_id, event_id];
+
+    return pool.query(queryStr, values).then((result:any)=>{
+      return result
+    })
+}
