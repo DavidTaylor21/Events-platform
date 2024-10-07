@@ -1,6 +1,6 @@
-const pool = require("../db/connection");
+import pool from "../db/connection.js";
 
-export const insertNewUser = (user: any) => {
+export const insertNewUser = (user) => {
   const { name, email, phone_number, staff } = user;
 
   const queryStr = `INSERT INTO users (name, email, phone_number, staff)
@@ -8,7 +8,7 @@ export const insertNewUser = (user: any) => {
 
   const values = [name, email, phone_number, staff];
 
-  return pool.query(queryStr, values).then((result: any) => {
+  return pool.query(queryStr, values).then((result) => {
     return result;
   });
 };

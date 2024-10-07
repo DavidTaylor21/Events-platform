@@ -5,42 +5,7 @@ dotenv.config();
 
 const TICKETMASTER_API_KEY = process.env.TICKETMASTER_API_KEY;
 
-interface Venue {
-  name: string;
-  city: { name: string };
-  country: { name: string };
-}
-
-interface EventDate {
-  start: {
-    localDate: string;
-    localTime: string;
-  };
-}
-
-interface PriceRange {
-  max: number;
-}
-
-interface Event {
-  name: string;
-  url: string; // URL for event
-  dates: EventDate;
-  priceRanges: PriceRange[];
-  _embedded: {
-    venues: Venue[];
-  };
-}
-
-export interface MappedEvent {
-  eventName: string;
-  eventLocation: string;
-  eventTime: string;
-  price: number;
-  capacity: number;
-}
-
-export async function getEventsInLondon(): Promise<MappedEvent[]> {
+export async function getEventsInLondon() {
   const url = `https://app.ticketmaster.com/discovery/v2/events.json`;
 
   try {
@@ -55,7 +20,7 @@ export async function getEventsInLondon(): Promise<MappedEvent[]> {
 
     const events = response.data._embedded?.events || [];
 
-    return events.map((event: Event): MappedEvent => {
+    return events.map((event) => {
       const eventPrice = event.priceRanges ? event.priceRanges[0].max : 0;
 
       return {
@@ -68,8 +33,7 @@ export async function getEventsInLondon(): Promise<MappedEvent[]> {
         capacity: Math.floor(Math.random() * 100) + 1,
       };
     });
-  } catch (error) {
-    const err = error as any;
+  } catch (err) {
     console.error("Error fetching events:", err.response?.data || err.message);
     throw err;
   }

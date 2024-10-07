@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../src/app";
 
-let server: any;
+let server
 
 beforeAll((done) => {
   server = app.listen(3000, done);
