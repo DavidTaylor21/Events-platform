@@ -1,14 +1,20 @@
-import pool from "../db/connection.js";
+import prisma from '../prisma/prismaClient.js'
 
 export const insertNewUser = (user) => {
   const { name, email, phone_number, staff } = user;
-
-  const queryStr = `INSERT INTO users (name, email, phone_number, staff)
-        VALUES ($1, $2, $3, $4)`;
-
-  const values = [name, email, phone_number, staff];
-
-  return pool.query(queryStr, values).then((result) => {
-    return result;
-  });
+  return prisma.users
+    .create({
+      data: {
+        name,
+        email,
+        phone_number,
+        staff,
+      },
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => {
+      throw new Error("Error inserting new user: " + error);
+    });
 };

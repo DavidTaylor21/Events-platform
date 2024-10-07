@@ -36,7 +36,7 @@ export const getEventById = (req, res) => {
       if (event.length === 0) {
         return res.status(404).send({ msg: "Event not found" });
       }
-      res.status(200).send({ event: event[0] });
+      res.status(200).send({ event });
     })
     .catch((err) => {
       console.error("Error fetching event by ID:", err);
