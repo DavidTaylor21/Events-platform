@@ -1,7 +1,7 @@
 import { postNewEvent, getAllEvents, getEventById , postUserToEvent} from "../controllers/events.controller.js";
 import {postNewUser} from "../controllers/users.controller.js"
 import express from "express"
-const cors = require('cors')
+import cors from "cors"
 
 const app = express();
 
