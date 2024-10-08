@@ -8,15 +8,15 @@ const app = express();
 app.use(cors())
 app.use(express.json());
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.status(200).send("Hello World");
 });
 
-app.post("/events", postNewEvent);
-app.get("/events", getAllEvents);
-app.get("/events/:id", getEventById)
-app.post("/events/:id/register", postUserToEvent)
+app.post("/api/events", postNewEvent);
+app.get("/api/events", getAllEvents);
+app.get("/api/events/:id", getEventById)
+app.post("/api/events/:id/register", postUserToEvent)
 
-app.post("/users", postNewUser)
+app.post("/api/users", postNewUser)
 
 export default app;
