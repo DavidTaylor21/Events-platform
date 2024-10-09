@@ -59,14 +59,15 @@ export const selectEventById = (id) => {
 };
 
 export const insertUserToEvent = (user_id, event_id) => {
-  return prisma.events.findUnique({
-    where: {
-      id: event_id,
-    },
-  })
-    .then(event => {
+  return prisma.events
+    .findUnique({
+      where: {
+        id: event_id,
+      },
+    })
+    .then((event) => {
       if (!event) {
-        return Promise.reject({ status: 404, msg: "Event not found" }); 
+        return Promise.reject({ status: 404, msg: "Event not found" });
       }
 
       return prisma.user_events.create({
@@ -76,4 +77,23 @@ export const insertUserToEvent = (user_id, event_id) => {
         },
       });
     });
+};
+
+export const editEvent = (eventId, body) => {
+  return prisma.events
+    .findUnique({
+      where: {
+        id: eventId,
+      },
+    })
+    .then((event) => {
+      if (!event) {
+        return Promise.reject({ status: 404, msg: "Event not found" });
+      }
+
+      return prisma.events.update({
+        where: { id: eventId },
+        data: body,
+      });
+    })
 };

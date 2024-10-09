@@ -3,6 +3,7 @@ import {
   selectAllEvents,
   selectEventById,
   insertUserToEvent,
+  editEvent,
 } from "../models/events.model.js";
 import prisma from "../prisma/prismaClient.js";
 
@@ -40,7 +41,7 @@ export const getEventById = (req, res) => {
       res.status(200).send({ event });
     })
     .catch((err) => {
-      err.msg && err.status
+      return err.msg && err.status
         ? res.status(err.status).send({ msg: err.msg })
         : res.status(500).send({ msg: "Error fetching event" });
     });
@@ -55,7 +56,9 @@ export const postUserToEvent = (req, res) => {
   }
 
   if (isNaN(user_id)) {
-    return res.status(400).send({ msg: "Bad Request: user_id must be a number" });
+    return res
+      .status(400)
+      .send({ msg: "Bad Request: user_id must be a number" });
   }
 
   if (isNaN(event_id)) {
@@ -68,13 +71,38 @@ export const postUserToEvent = (req, res) => {
     })
     .catch((err) => {
       if (err.code === "P2002") {
-        return res.status(409).send({ msg: "User already registered for this event" });
+        return res
+          .status(409)
+          .send({ msg: "User already registered for this event" });
       }
 
-      if (err.msg && err.status) { 
-        return res.status(err.status).send({ msg: err.msg })
+      if (err.msg && err.status) {
+        return res.status(err.status).send({ msg: err.msg });
       }
 
-      return res.status(500).send({ msg: "Error inserting user to event", err });
+      return res
+        .status(500)
+        .send({ msg: "Error inserting user to event", err });
+    });
+};
+
+export const patchEvent = (req, res) => {
+  const eventId = parseInt(req.params.id, 10);
+  const updatedData = req.body;
+  if (isNaN(eventId)) {
+    return res.status(400).send({ msg: "Bad Request" });
+  }
+
+  editEvent(eventId, updatedData)
+    .then((updatedEvent) => {
+      return res
+        .status(200)
+        .send({ msg: "Event updated", event: updatedEvent });
+    })
+    .catch((err) => {
+      if (err.msg && err.status) {
+        return res.status(err.status).send({ msg: err.msg });
+      }
+      return res.status(500).send({ msg: "Error updating event" });
     });
 };

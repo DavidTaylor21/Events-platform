@@ -208,7 +208,7 @@ describe("POST api/users", () => {
       email: "john.doe@example.com",
       phone_number: "01234567899",
       staff: true,
-    }
+    };
     return request(app)
       .post("/api/users")
       .send(newUser)
@@ -224,12 +224,7 @@ describe("POST api/users", () => {
       });
   });
   describe("Error handling for POST /api/users", () => {
-    const requiredFields = [
-      "name",
-      "email",
-      "phone_number",
-      "staff",
-    ];
+    const requiredFields = ["name", "email", "phone_number", "staff"];
     test.each(requiredFields)(
       "should respond with 400 bad request when %s is missing",
       (missingField) => {
@@ -238,7 +233,7 @@ describe("POST api/users", () => {
           email: "john.doe@example.com",
           phone_number: "01234567899",
           staff: true,
-        }
+        };
 
         delete newUser[missingField];
 
@@ -253,4 +248,141 @@ describe("POST api/users", () => {
     );
   });
 });
+describe("PATCH api/events/:id", () => {
+  const validEventId = 1;
+  const invalidEventId = 9999;
+  const newEventData = {
+    event_name: "Updated Event Name",
+    event_time: "2024-11-15T18:00:00Z",
+    location: "New Location",
+  };
+  test("Should return 200 and the updated event", () => {
+    return request(app)
+      .patch(`/api/events/${validEventId}`)
+      .send(newEventData)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.msg).toBe("Event updated");
+        expect(response.body.event).toHaveProperty("id", validEventId);
+        expect(response.body.event).toHaveProperty(
+          "event_name",
+          "Updated Event Name"
+        );
+        expect(new Date(response.body.event.event_time).toISOString()).toBe(
+          "2024-11-15T18:00:00.000Z"
+        );
+        expect(response.body.event).toHaveProperty("location", "New Location");
+      });
+  });
+  test("Should return 400 when event ID is invalid", () => {
+    return request(app)
+      .patch(`/api/events/notanumber`)
+      .send(newEventData)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad Request");
+      });
+  });
 
+  test("Should return 404 when event does not exist", () => {
+    return request(app)
+      .patch(`/api/events/${invalidEventId}`)
+      .send(newEventData)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("Event not found");
+      });
+  });
+});
+describe("PATCH /api/users/:id", () => {
+  const validUserId = 1; // Assuming this user ID exists in the database
+  const invalidUserId = "invalid"; // Not a valid ID
+  const nonExistentUserId = 9999; // Assuming this user ID does not exist
+  const updatedUserData = {
+    name: "Updated User Name",
+    email: "updateduser@example.com",
+  };
+
+  test("Should return 200 and the updated user", () => {
+    return request(app)
+      .patch(`/api/users/${validUserId}`)
+      .send(updatedUserData)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.msg).toBe("User updated");
+        expect(response.body.user).toHaveProperty("id", validUserId);
+        expect(response.body.user).toHaveProperty("name", updatedUserData.name);
+        expect(response.body.user).toHaveProperty(
+          "email",
+          updatedUserData.email
+        );
+      });
+  });
+
+  test("Should return 400 when user ID is invalid", () => {
+    return request(app)
+      .patch(`/api/users/${invalidUserId}`)
+      .send(updatedUserData)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid user ID");
+      });
+  });
+
+  test("Should return 404 when user does not exist", () => {
+    return request(app)
+      .patch(`/api/users/${nonExistentUserId}`)
+      .send(updatedUserData)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("User not found");
+      });
+  });
+});
+describe("GET /api/users/:id", () => {
+  const validUserId = 1;
+  const invalidUserId = 9999;
+  const invalidUserIdString = "invalid_id";
+
+  const testUser = {
+    id: validUserId,
+    name: "David",
+    email: "david@fmail.com",
+    phone_number: "07847263857",
+    staff: true,
+  };
+
+  test("Should return user data when user exists", () => {
+    return request(app)
+      .get(`/api/users/${validUserId}`)
+      .expect(200)
+      .then((response) => {
+        expect(response.body.user).toHaveProperty("id", testUser.id);
+        expect(response.body.user).toHaveProperty("name", testUser.name);
+        expect(response.body.user).toHaveProperty("email", testUser.email);
+        expect(response.body.user).toHaveProperty(
+          "phone_number",
+          testUser.phone_number
+        );
+        expect(response.body.user).toHaveProperty("staff", testUser.staff);
+      });
+  });
+
+  test("Should return 404 when user does not exist", () => {
+    return request(app)
+      .get(`/api/users/${invalidUserId}`)
+      .expect(404)
+      .then((response) => {
+        expect(response.body.msg).toBe("User not found");
+      });
+  });
+
+  test("Should return 400 for an invalid user ID format", () => {
+    return request(app)
+      .get(`/api/users/${invalidUserIdString}`)
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Invalid user ID");
+      });
+  });
+});

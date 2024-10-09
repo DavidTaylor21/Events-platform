@@ -1,8 +1,8 @@
-import prisma from '../prisma/prismaClient.js'
+import prisma from "../prisma/prismaClient.js";
 
 export const insertNewUser = (user) => {
   const { name, email, phone_number, staff } = user;
-  if (!name || !email || !phone_number || !staff ) {
+  if (!name || !email || !phone_number || !staff) {
     return Promise.reject({ status: 400, msg: "content missing from body" });
   }
   return prisma.users
@@ -16,5 +16,30 @@ export const insertNewUser = (user) => {
     })
     .then((result) => {
       return result;
+    });
+};
+export const editUser = (userId, body) => {
+  return prisma.users
+    .findUnique({
+      where: {
+        id: userId,
+      },
     })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject({ status: 404, msg: "User not found" });
+      }
+
+      return prisma.users.update({
+        where: { id: userId },
+        data: body,
+      });
+    });
+};
+export const fetchUserById = (id) => {
+  if (isNaN(id)) {
+    return Promise.reject({ status: 400, msg: "Invalid user ID" });
+  }
+  const userId = parseInt(id, 10);
+  return prisma.users.findUnique({ where: { id: userId } });
 };
