@@ -67,8 +67,6 @@ export const postUserToEvent = (req, res) => {
       res.status(200).send({ msg: "User submitted to event", result });
     })
     .catch((err) => {
-      console.error("Error inserting user to event:", err);
-
       if (err.code === "P2002") {
         return res.status(409).send({ msg: "User already registered for this event" });
       }

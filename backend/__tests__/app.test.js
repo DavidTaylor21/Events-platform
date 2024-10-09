@@ -160,7 +160,6 @@ describe("POST /api/events/:id/users", () => {
       .send({})
       .expect(400)
       .then((response) => {
-        console.log(response.body)
         expect(response.body.msg).toBe("User ID is required");
       });
   });
@@ -186,17 +185,72 @@ describe("POST /api/events/:id/users", () => {
   });
   test("Should respond with 409 when user is already registered for an event", () => {
     return request(app)
-      .post(`/api/events/${validEventId}/register`) 
+      .post(`/api/events/${validEventId}/register`)
       .send({ user_id: validUserId })
       .expect(200)
       .then(() => {
         return request(app)
           .post(`/api/events/${validEventId}/register`)
           .send({ user_id: validUserId })
-          .expect(409) 
+          .expect(409)
           .then((response) => {
-            expect(response.body.msg).toBe("User already registered for this event");
+            expect(response.body.msg).toBe(
+              "User already registered for this event"
+            );
           });
       });
   });
 });
+describe("POST api/users", () => {
+  test("Should respond with 201 and return the new user", () => {
+    const newUser = {
+      name: "john_doe",
+      email: "john.doe@example.com",
+      phone_number: "01234567899",
+      staff: true,
+    }
+    return request(app)
+      .post("/api/users")
+      .send(newUser)
+      .expect(201)
+      .then((response) => {
+        expect(response.body.newUser).toHaveProperty("id");
+        expect(newUser).toEqual({
+          name: response.body.newUser.name,
+          email: response.body.newUser.email,
+          phone_number: response.body.newUser.phone_number,
+          staff: response.body.newUser.staff,
+        });
+      });
+  });
+  describe("Error handling for POST /api/users", () => {
+    const requiredFields = [
+      "name",
+      "email",
+      "phone_number",
+      "staff",
+    ];
+    test.each(requiredFields)(
+      "should respond with 400 bad request when %s is missing",
+      (missingField) => {
+        const newUser = {
+          name: "john_doe",
+          email: "john.doe@example.com",
+          phone_number: "01234567899",
+          staff: true,
+        }
+
+        delete newUser[missingField];
+
+        return request(app)
+          .post("/api/users")
+          .send(newUser)
+          .expect(400)
+          .then((response) => {
+            expect(response.body.msg).toBe("content missing from body");
+          });
+      }
+    );
+  });
+});
+
