@@ -184,7 +184,7 @@ describe("POST /api/events/:id/users", () => {
         expect(response.body.msg).toBe("Event not found");
       });
   });
-  test("Should respond with 409 when user is already registered for an event", () => {
+  test-("Should respond with 409 when user is already registered for an event", () => {
     return request(app)
       .post(`/api/events/${validEventId}/register`) 
       .send({ user_id: validUserId })
