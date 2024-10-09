@@ -8,18 +8,23 @@ datasource db {
 }
 
 model events {
-  id         Int       @id @default(autoincrement())
-  event_name String?   @db.VarChar(255)
-  location   String?   @db.VarChar(255)
-  event_time DateTime? @db.Timestamp(6)
-  price      Decimal?  @db.Decimal(10, 2)
+  id         Int        @id @default(autoincrement())
+  event_name String?    @db.VarChar(255)
+  location   String?    @db.VarChar(255)
+  event_time DateTime?  @db.Timestamp(6)
+  price      Decimal?   @db.Decimal(10, 2)
   capacity   Int?
+  
+  userEvents user_events[] // Relation to user_events
 }
 
 model user_events {
-  id       Int @id @default(autoincrement())
+  id       Int   @id @default(autoincrement())
   user_id  Int
   event_id Int
+
+  user     users  @relation(fields: [user_id], references: [id])
+  event    events @relation(fields: [event_id], references: [id]) // Relation to events
 
   @@unique([user_id, event_id])
 }
@@ -30,4 +35,6 @@ model users {
   email        String?  @db.VarChar(255)
   phone_number String?  @db.VarChar(255)
   staff        Boolean?
+
+  userEvents user_events[] // Relation to user_events
 }

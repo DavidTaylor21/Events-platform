@@ -43,3 +43,28 @@ export const fetchUserById = (id) => {
   const userId = parseInt(id, 10);
   return prisma.users.findUnique({ where: { id: userId } });
 };
+export const getUserEvents = (userId) => {
+  return prisma.users
+    .findUnique({
+      where: {
+        id: userId,
+      },
+    })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject({ status: 404, msg: "User not found" });
+      }
+      return prisma.user_events
+        .findMany({
+          where: {
+            user_id: userId,
+          },
+          include: {
+            event: true,
+          },
+        })
+        .then((userEvents) => {
+          return userEvents.map((userEvent) => userEvent.event);
+        });
+    });
+};

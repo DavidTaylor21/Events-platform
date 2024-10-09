@@ -1,4 +1,4 @@
-import { insertNewUser, editUser , fetchUserById} from "../models/users.model.js";
+import { insertNewUser, editUser , fetchUserById, getUserEvents} from "../models/users.model.js";
 export const postNewUser = (req, res) => {
   insertNewUser(req.body)
     .then((newUser) => {
@@ -36,10 +36,26 @@ export const getUserById = (req, res) => {
           }
         return res.status(200).send({user})
     }).catch((err)=>{
-        console.log(err)
         if (err.msg && err.status) {
             return res.status(err.status).send({ msg: err.msg });
           }
           return res.status(500).send({ msg: "Error getting user" });
     })
 };
+export const getEventsByUser = (req, res) => {
+    const userId = parseInt(req.params.id, 10); 
+  
+    if (isNaN(userId)) {
+      return res.status(400).send({ msg: "Invalid user ID" });
+    }
+    getUserEvents(userId)
+      .then((events) => {
+        return res.status(200).send(events); 
+      })
+      .catch((err) => {
+        if (err.msg && err.status) {
+            return res.status(err.status).send({ msg: err.msg });
+          }
+        return res.status(500).send({ msg: "Error fetching user events" });
+      });
+  };  

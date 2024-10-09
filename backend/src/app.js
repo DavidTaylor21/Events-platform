@@ -1,5 +1,5 @@
 import { postNewEvent, getAllEvents, getEventById , postUserToEvent, patchEvent} from "../controllers/events.controller.js";
-import {postNewUser, patchUser, getUserById} from "../controllers/users.controller.js"
+import {postNewUser, patchUser, getUserById, getEventsByUser} from "../controllers/users.controller.js"
 import express from "express"
 import cors from "cors"
 
@@ -21,6 +21,7 @@ app.patch("/api/events/:id", patchEvent)
 app.post("/api/users", postNewUser)
 app.patch("/api/users/:id", patchUser)
 app.get("/api/users/:id", getUserById)
+app.get("/api/users/:id/events", getEventsByUser)
 
 app.all("/api/*", (req,res)=>{
   res.status(404).send({msg : "Page not found"})

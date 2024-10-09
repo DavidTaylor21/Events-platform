@@ -386,3 +386,47 @@ describe("GET /api/users/:id", () => {
       });
   });
 });
+describe("GET /api/users/:id/events", () => {
+  const validUserId = 1; // Assuming this is a valid user ID
+  const validEventId = 1; // Assuming this is a valid event ID
+  const invalidUserId = 9999; // An ID that does not exist in the database
+
+  const eventToRegister = {
+    user_id: validUserId,
+  };
+
+  test("Should return all events a user is attending", () => {
+    return request(app)
+      .post(`/api/events/${validEventId}/register`)
+      .send(eventToRegister)
+      .expect(200)
+      .then(() => {
+        return request(app)
+          .get(`/api/users/${validUserId}/events`)
+          .expect(200)
+          .then((response) => {
+            expect(response.body).toBeInstanceOf(Array);
+            expect(response.body).toHaveLength(1);
+            const event = response.body[0];
+            expect(event).toHaveProperty("id", validEventId);
+            expect(event).toHaveProperty("event_name");
+            expect(event).toHaveProperty("event_time");
+            expect(event).toHaveProperty("location");
+          });
+      });
+  });
+  test("Should return 404 when user does not exist", () => {
+    return request(app)
+      .post(`/api/events/${validEventId}/register`)
+      .send(eventToRegister)
+      .expect(200)
+      .then(() => {
+        return request(app)
+          .get(`/api/users/${invalidUserId}/events`)
+          .expect(404)
+          .then((response) => {
+            expect(response.body.msg).toBe("User not found");
+          });
+      });
+  });
+});
