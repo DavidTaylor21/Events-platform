@@ -19,4 +19,8 @@ app.post("/api/events/:id/register", postUserToEvent)
 
 app.post("/api/users", postNewUser)
 
+app.all("/api/*", (req,res)=>{
+  res.status(404).send({msg : "Page not found"})
+})
+
 export default app;

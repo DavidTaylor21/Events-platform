@@ -1,5 +1,5 @@
-const axios = require("axios");
-const dotenv = require("dotenv");
+import axios from "axios"
+import dotenv from "dotenv"
 
 dotenv.config();
 
