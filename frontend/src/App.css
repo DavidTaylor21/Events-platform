@@ -1,3 +1,58 @@
 h1{
     text-align:center
 }
+.event-card {
+    background-color: lightgray;
+    border: 1px solid black;
+    color: red;
+    width: calc(33% - 20px); 
+    height: calc(33% - 20px); 
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box; 
+    padding: 20px;
+    list-style-type:none
+}
+.event-list {
+    display: flex;
+    flex-wrap: wrap; 
+    justify-content: space-between; 
+    gap: 20px; 
+    padding: 20px;
+    margin: 0 auto; 
+    max-width: 1200px; 
+}
+
+  .container {
+    max-width: "400px";
+    margin: "auto";
+    padding: "20px";
+    border: "1px solid #ccc";
+    border-radius: "8px";
+    box-shadow: "0 2px 10px rgba(0,0,0,0.1)"
+  }
+  .form {
+    display: "flex";
+    flex-direction: "column";
+  }
+  .inputGroup {
+    margin-bottom: "15px"
+  }
+  .input {
+    padding: "10px";
+    border: "1px solid #ccc";
+    border-radius: "4px"
+  }
+ .button {
+    padding: "10px";
+    background-color: "#28a745";
+    color: "#fff";
+    border: "none";
+    border-radius: "4px";
+    cursor: "pointer"
+  }
+  .error {
+    color: "red";
+    font-size: "14px"
+  }

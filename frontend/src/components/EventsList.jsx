@@ -34,10 +34,10 @@ export const EventsList = () => {
   }
 
   return (
-    <ul>
+    <ul className="event-list">
       {allEvents.map((event) => (
-        <li key={event.id}>
-          <EventCard event={event} />
+        <li key={event.id} className="event-card">
+          <EventCard event={event}/>
         </li>
       ))}
     </ul>
