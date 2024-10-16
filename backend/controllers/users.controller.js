@@ -70,7 +70,6 @@ export const getEventsByUser = (req, res) => {
       if (err.msg && err.status) {
           return res.status(err.status).send({ msg: err.msg });
         }
-        console.log(err)
       return res.status(500).send({ msg: "Error logging in user" });
     });
   }
