@@ -1,22 +1,25 @@
 import prisma from "../prisma/prismaClient.js";
+import bcrypt from "bcrypt";
 
 export const insertNewUser = (user) => {
-  const { name, email, phone_number, staff } = user;
-  if (!name || !email || !phone_number || !staff) {
+  const { name, email, staff, password } = user;
+  if (!name || !email || !staff || password) {
     return Promise.reject({ status: 400, msg: "content missing from body" });
   }
-  return prisma.users
-    .create({
-      data: {
-        name,
-        email,
-        phone_number,
-        staff,
-      },
-    })
-    .then((result) => {
-      return result;
-    });
+  return bcrypt.hash(password, 10).then((hashedPassword) => {
+    prisma.users
+      .create({
+        data: {
+          name,
+          email,
+          staff,
+          hashedPassword,
+        },
+      })
+      .then((result) => {
+        return result;
+      });
+  });
 };
 export const editUser = (userId, body) => {
   return prisma.users
@@ -67,4 +70,22 @@ export const getUserEvents = (userId) => {
           return userEvents.map((userEvent) => userEvent.event);
         });
     });
+};
+export const loginUser = (body) => {
+  const { email, password } = body;
+
+  return prisma.users.findUnique({ where: { email } }).then((userResult) => {
+    if (!userResult) {
+      return Promise.reject({ status: 400, msg: "Invalid Credentials" });
+    }
+
+    return bcrypt
+      .compare(password, userResult.password)
+      .then((passwordsMatch) => {
+        if (!passwordsMatch) {
+          return Promise.reject({ status: 400, msg: "Invalid Credentials" });
+        }
+        return userResult;
+      });
+  });
 };

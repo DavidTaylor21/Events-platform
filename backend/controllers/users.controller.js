@@ -1,4 +1,4 @@
-import { insertNewUser, editUser , fetchUserById, getUserEvents} from "../models/users.model.js";
+import { insertNewUser, editUser , fetchUserById, getUserEvents, loginUser} from "../models/users.model.js";
 export const postNewUser = (req, res) => {
   insertNewUser(req.body)
     .then((newUser) => {
@@ -59,3 +59,18 @@ export const getEventsByUser = (req, res) => {
         return res.status(500).send({ msg: "Error fetching user events" });
       });
   };  
+  export const postUserForLogin = (req,res) => {
+    loginUser(req.body).then((userResult)=>{
+      if(userResult){
+        res.status(200).send({msg: "User Validated", user:userResult})
+      }
+      res.status(400).send({msg:"Invalid Credentials"})
+    })
+    .catch((err) => {
+      if (err.msg && err.status) {
+          return res.status(err.status).send({ msg: err.msg });
+        }
+        console.log(err)
+      return res.status(500).send({ msg: "Error logging in user" });
+    });
+  }

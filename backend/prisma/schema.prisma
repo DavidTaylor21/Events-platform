@@ -15,7 +15,7 @@ model events {
   price      Decimal?   @db.Decimal(10, 2)
   capacity   Int?
   
-  userEvents user_events[] // Relation to user_events
+  userEvents user_events[] 
 }
 
 model user_events {
@@ -24,7 +24,7 @@ model user_events {
   event_id Int
 
   user     users  @relation(fields: [user_id], references: [id])
-  event    events @relation(fields: [event_id], references: [id]) // Relation to events
+  event    events @relation(fields: [event_id], references: [id]) 
 
   @@unique([user_id, event_id])
 }
@@ -32,9 +32,10 @@ model user_events {
 model users {
   id           Int      @id @default(autoincrement())
   name         String?  @db.VarChar(255)
-  email        String?  @db.VarChar(255)
-  phone_number String?  @db.VarChar(255)
+  email        String?  @db.VarChar(255) @unique
   staff        Boolean?
+  password     String?  @db.VarChar(255) 
 
-  userEvents user_events[] // Relation to user_events
+  user_events user_events[]
 }
+
