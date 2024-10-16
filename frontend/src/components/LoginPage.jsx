@@ -1,41 +1,39 @@
-import React, { useState } from "react";
-import { useAuth } from "../context/AuthContext";
+import React, { useState, useContext } from "react";
+import { UserContext } from "./UserContext";
+import { userLogin } from "../../api";
 
-const LoginPage = () => {
-  const { login } = useAuth(); 
-  const [username, setUsername] = useState("");
+export const LoginPage = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-
+  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
 
   const handleLogin = (e) => {
-    e.preventDefault(); 
-
-    if (staff === "staff" && password === "password123") {
-      // Replace this condition with your actual authentication logic
-      const userData = { role: "staff" }; // Simulated user data
-      login(userData); 
-    } else {
-      setError("Invalid username or password."); 
-    }
+    e.preventDefault();
+    return userLogin(email, password).then((userData) => {
+      setLoggedInUser(userData);
+    }).catch((err) => {
+      console.log(err)
+      setError(err.msg || "An error occurred during login."); 
+    });
   };
 
   return (
-    <div style={styles.container}>
+    <div>
       <h2>Login Page</h2>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <div style={styles.inputGroup}>
-          <label htmlFor="username">Username:</label>
+      <p>{loggedInUser ? loggedInUser.name : "Not logged in"}</p>
+      <form onSubmit={handleLogin}>
+        <div>
+          <label htmlFor="email">Email address:</label>
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            style={styles.input}
           />
         </div>
-        <div style={styles.inputGroup}>
+        <div>
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -43,18 +41,12 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={styles.input}
           />
         </div>
-        {error && <p style={styles.error}>{error}</p>}
-        <button type="submit" style={styles.button}>
-          Login
-        </button>
+        {error && <p>{error}</p>}
+        <button type="submit">Login</button>
       </form>
     </div>
   );
 };
-
-
-export default LoginPage;
 
