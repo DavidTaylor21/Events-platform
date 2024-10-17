@@ -1,4 +1,10 @@
-import { insertNewUser, editUser , fetchUserById, getUserEvents, loginUser} from "../models/users.model.js";
+import {
+  insertNewUser,
+  editUser,
+  fetchUserById,
+  getUserEvents,
+  loginUser,
+} from "../models/users.model.js";
 export const postNewUser = (req, res) => {
   insertNewUser(req.body)
     .then((newUser) => {
@@ -29,47 +35,51 @@ export const patchUser = (req, res) => {
     });
 };
 export const getUserById = (req, res) => {
-    const userId = req.params.id;
-    fetchUserById(userId).then((user)=>{
-        if (!user) {
-            return res.status(404).send({ msg: "User not found" });
-          }
-        return res.status(200).send({user})
-    }).catch((err)=>{
-        if (err.msg && err.status) {
-            return res.status(err.status).send({ msg: err.msg });
-          }
-          return res.status(500).send({ msg: "Error getting user" });
-    })
-};
-export const getEventsByUser = (req, res) => {
-    const userId = parseInt(req.params.id, 10); 
-  
-    if (isNaN(userId)) {
-      return res.status(400).send({ msg: "Invalid user ID" });
-    }
-    getUserEvents(userId)
-      .then((events) => {
-        return res.status(200).send(events); 
-      })
-      .catch((err) => {
-        if (err.msg && err.status) {
-            return res.status(err.status).send({ msg: err.msg });
-          }
-        return res.status(500).send({ msg: "Error fetching user events" });
-      });
-  };  
-  export const postUserForLogin = (req,res) => {
-    loginUser(req.body).then((userResult)=>{
-      if(userResult){
-        res.status(200).send({msg: "User Validated", user:userResult})
+  const userId = req.params.id;
+  fetchUserById(userId)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).send({ msg: "User not found" });
       }
-      res.status(400).send({msg:"Invalid Credentials"})
+      return res.status(200).send({ user });
     })
     .catch((err) => {
       if (err.msg && err.status) {
-          return res.status(err.status).send({ msg: err.msg });
-        }
+        return res.status(err.status).send({ msg: err.msg });
+      }
+      return res.status(500).send({ msg: "Error getting user" });
+    });
+};
+export const getEventsByUser = (req, res) => {
+  const userId = parseInt(req.params.id, 10);
+
+  if (isNaN(userId)) {
+    return res.status(400).send({ msg: "Invalid user ID" });
+  }
+  getUserEvents(userId)
+    .then((events) => {
+      return res.status(200).send(events);
+    })
+    .catch((err) => {
+      if (err.msg && err.status) {
+        return res.status(err.status).send({ msg: err.msg });
+      }
+      return res.status(500).send({ msg: "Error fetching user events" });
+    });
+};
+export const postUserForLogin = (req, res) => {
+  loginUser(req.body)
+    .then((userResult) => {
+      if (userResult) {
+        res.status(200).send({ msg: "User Validated", user: userResult });
+      } else {
+        res.status(400).send({ msg: "Invalid Credentials" });
+      }
+    })
+    .catch((err) => {
+      if (err.msg && err.status) {
+        return res.status(err.status).send({ msg: err.msg });
+      }
       return res.status(500).send({ msg: "Error logging in user" });
     });
-  }
+};
