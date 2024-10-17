@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export const insertNewUser = (user) => {
   const { name, email, staff, password } = user;
-  if (!name || !email || !staff || !password) {
+  if (!name || !email || typeof staff !== 'boolean' || !password) {
     return Promise.reject({ status: 400, msg: "content missing from body" });
   }
   return bcrypt.hash(password, 10).then((hashedPassword) => {
