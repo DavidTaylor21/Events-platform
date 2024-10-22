@@ -14,11 +14,9 @@ export const EventsList = () => {
 
     getAllEvents()
       .then((events) => {
-        console.log(events)
         setAllEvents(events);
       })
       .catch((err) => {
-        console.log(err)
         setError(err);
       })
       .finally(() => {

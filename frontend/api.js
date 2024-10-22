@@ -15,9 +15,10 @@ export const getEventById = (eventId) => {
 };
 export const userLogin = (email, password) => {
   const loginDetails = { email, password };
+  console.log("api login")
   return api.post("users/login", loginDetails).then((userData) => {
     return userData.data.user;
-  });
+  })
 };
 export const userRegister = (name, email, password) => {
   const userDetails = { name, email, staff: false, password };
@@ -25,3 +26,8 @@ export const userRegister = (name, email, password) => {
     return userData.data.user;
   })
 };
+export const signUpForEvent = (userId, eventId) => {
+  return api.post(`events/${eventId}/register`, {user_id:userId}).then((response)=>{
+    return response.data
+  })
+}
