@@ -1,21 +1,24 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") 
+}
+
 generator client {
   provider = "prisma-client-js"
 }
-
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-}
-
 model events {
-  id         Int        @id @default(autoincrement())
-  event_name String?    @db.VarChar(255)
-  location   String?    @db.VarChar(255)
-  event_time DateTime?  @db.Timestamp(6)
-  price      Decimal?   @db.Decimal(10, 2)
-  capacity   Int?
+  id          Int       @id @default(autoincrement())
+  event_name  String?   
+  location    String?   
+  description String?  
+  price       Float?    
+  capacity    Int?
   
-  userEvents user_events[] 
+  start_time  DateTime? 
+  end_time    DateTime? 
+  timeZone    String?   
+  
+  userEvents  user_events[] 
 }
 
 model user_events {
@@ -31,10 +34,10 @@ model user_events {
 
 model users {
   id           Int      @id @default(autoincrement())
-  name         String?  @db.VarChar(255)
-  email        String?  @db.VarChar(255) @unique
+  name         String?  
+  email        String?  @unique
   staff        Boolean?
-  password     String?  @db.VarChar(255) 
+  password     String?  
 
   user_events user_events[]
 }
