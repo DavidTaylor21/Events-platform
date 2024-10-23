@@ -99,7 +99,19 @@ export const editEvent = (eventId, body) => {
 };
 export const deleteEventById = (eventId) => {
   const id = parseInt(eventId, 10);
-  return prisma.events.delete({ where: { id } }).then((result) => {
-    return result;
-  })
+
+  return prisma.user_events
+    .deleteMany({
+      where: { event_id: id },
+    })
+    .then(() => {
+      return prisma.events.delete({ where: { id } });
+    })
+    .then((result) => {
+      return result;
+    })
+    .catch((err) => {
+      console.error("Error deleting event:", err);
+      throw err;
+    });
 };
