@@ -101,7 +101,5 @@ export const deleteEventById = (eventId) => {
   const id = parseInt(eventId, 10);
   return prisma.events.delete({ where: { id } }).then((result) => {
     return result;
-  }).catch((err)=>{
-    console.log(err)
   })
 };
