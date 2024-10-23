@@ -4,25 +4,37 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const insertNewEvent = (body) => {
-  const { event_name, location, event_time, price, capacity } = body;
-  if (!event_name || !location || !event_time || !price || !capacity) {
-    return Promise.reject({ status: 400, msg: "content missing from body" });
+  const { event_name, location, description, start_time, end_time, price, capacity, timeZone } = body;
+
+  if (!event_name || !location || !start_time || !end_time || !timeZone) {
+    return Promise.reject({ status: 400, msg: "Required content missing from body" });
   }
+
+  if (new Date(start_time) >= new Date(end_time)) {
+    return Promise.reject({ status: 400, msg: "Start time must be before end time" });
+  }
+
+  const parsedPrice = price ? parseFloat(price) : null;
+  const parsedCapacity = capacity ? parseInt(capacity, 10) : null;
 
   return prisma.events
     .create({
       data: {
         event_name,
         location,
-        event_time,
-        price,
-        capacity,
+        description,
+        start_time: new Date(start_time),
+        end_time: new Date(end_time),
+        price: parsedPrice,
+        capacity: parsedCapacity,
+        timeZone,
       },
     })
     .then((newEvent) => {
       return newEvent;
-    });
+    })
 };
+
 
 export const selectAllEvents = () => {
   return prisma.events.findMany().then((events) => {
