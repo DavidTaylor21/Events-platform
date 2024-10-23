@@ -4,9 +4,8 @@ import {
   selectEventById,
   insertUserToEvent,
   editEvent,
+  deleteEventById,
 } from "../models/events.model.js";
-import prisma from "../prisma/prismaClient.js";
-
 export const postNewEvent = (req, res) => {
   insertNewEvent(req.body)
     .then((newEvent) => {
@@ -104,5 +103,21 @@ export const patchEvent = (req, res) => {
         return res.status(err.status).send({ msg: err.msg });
       }
       return res.status(500).send({ msg: "Error updating event" });
+    });
+};
+export const deleteEvent = (req, res) => {
+  const eventId = req.params.id;
+  deleteEventById(eventId)
+    .then(() => {
+      res.status(200).send({ msg: "Event successfully deleted" });
+    })
+    .catch((err) => {
+      if (err.code === "P2025") {
+        return res.status(400).send({ msg: "event not found" });
+      } else {
+        return err.msg && err.status
+          ? res.status(err.status).send({ msg: err.msg })
+          : res.status(500).send({ msg: "Error deleting event" });
+      }
     });
 };
