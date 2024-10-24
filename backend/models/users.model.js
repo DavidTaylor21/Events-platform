@@ -7,7 +7,7 @@ export const insertNewUser = (user) => {
     return Promise.reject({ status: 400, msg: "content missing from body" });
   }
   return bcrypt.hash(password, 10).then((hashedPassword) => {
-    prisma.users
+    return prisma.users
       .create({
         data: {
           name,
