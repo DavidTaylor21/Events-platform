@@ -4,20 +4,22 @@ import { SingleEvent } from "./components/SingleEvent";
 import { LoginPage } from "./components/LoginPage";
 import { UserContext } from "./components/UserContext";
 import { NavBar } from "./components/NavBar";
-import { GoogleLoginButton } from "./components/GoogleLoginButton";
 import { useContext, useState, useEffect } from "react";
-import "./App.css"
+import { MyEvents } from "./components/MyEvents";
+import { AddEvent } from "./components/AddEvent";
+
+import "./App.css";
+import { ManageEvents } from "./components/ManageEvents";
+import { GoogleLoginButton } from "./components/GoogleLoginButton";
 
 function App() {
-  const { logout, setLoggedInUser } = useContext(UserContext);
+  const { logout, setLoggedInUser , loggedInUser} = useContext(UserContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isStaff, setIsStaff] = useState(false);
   useEffect(() => {
     const userData = localStorage.getItem("eventsPlatformUser");
     if (userData) {
       const parsedUserData = JSON.parse(userData);
       setIsLoggedIn(true);
-      setIsStaff(parsedUserData.staff);
       setLoggedInUser(parsedUserData);
     } else {
       setIsLoggedIn(false);
@@ -26,22 +28,25 @@ function App() {
   const handleLogout = () => {
     logout();
     setIsLoggedIn(false);
-    setIsStaff(false);
-    localStorage.removeItem("eventsPlatformUser");
+    localStorage.removeItem('googleAccessToken');
   };
   const ProtectedRoute = ({ element }) => {
     return isLoggedIn ? element : <Navigate to="/login" />;
   };
-
   return (
     <>
       <h1>EVENTS PLATFORM</h1>
+      
       {isLoggedIn && (
+        <>
+        <GoogleLoginButton/>
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
+        <p>Logged in as {loggedInUser.name}</p>
+        </>
       )}
-      <NavBar isStaff={isStaff} />
+      <NavBar />
       <Routes>
         <Route
           path="/events"
@@ -58,6 +63,18 @@ function App() {
           element={
             <LoginPage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
           }
+        />
+        <Route
+          path="/my-events"
+          element={<ProtectedRoute element={<MyEvents />} />}
+        />
+        <Route
+          path="/manage-events"
+          element={<ProtectedRoute element={<ManageEvents />} />}
+        />
+        <Route
+          path="/add-event"
+          element={<ProtectedRoute element={<AddEvent />} />}
         />
       </Routes>
     </>

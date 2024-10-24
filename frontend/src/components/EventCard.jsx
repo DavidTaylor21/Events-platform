@@ -6,8 +6,7 @@ export const EventCard = ({ event }) => {
     <>
       <p className="event-name">{event.event_name}</p>
       <p className="event-location">{event.location}</p>
-      <p className="event-date">{convertDate(event.event_time)}</p>
-      <p className="event-price">£{event.price}</p>
+      <p className="event-date">{convertDate(event.start_time)}</p>
 
       <Link to={`/events/${event.id}`} className="event-link">
         <button className="event-button">Event details</button>

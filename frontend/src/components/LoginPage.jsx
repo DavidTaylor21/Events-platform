@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { UserContext } from "./UserContext";
 import { userLogin, userRegister } from "../../api";
 import { Navigate } from "react-router-dom";
-import '../App.css'; 
+import "../App.css";
 export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
@@ -11,7 +11,7 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
   const [error, setError] = useState("");
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [redirect, setRedirect] = useState(false);
-  const { setLoggedInUser } = useContext(UserContext);
+  const { setLoggedInUser, setIsStaff } = useContext(UserContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -42,7 +42,6 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
         setIsLoggedIn(true);
       })
       .catch((err) => {
-        console.log(err);
         setIsLoggingIn(false);
         setError(err.msg || "An error occurred during registration.");
       });
@@ -55,7 +54,10 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
   return (
     <div className="login-container">
       <h2 className="login-title">{isLogin ? "Login" : "Register"}</h2>
-      <form className="login-form" onSubmit={isLogin ? handleLogin : handleRegister}>
+      <form
+        className="login-form"
+        onSubmit={isLogin ? handleLogin : handleRegister}
+      >
         {!isLogin && (
           <div className="form-group">
             <label htmlFor="name">Name:</label>
@@ -105,4 +107,3 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
     </div>
   );
 };
-

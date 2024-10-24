@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { GoogleLoginButton } from "./GoogleLoginButton";
+import { UserContext } from "./UserContext";
 
-export const NavBar = ({ isStaff }) => {
+export const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { loggedInUser } = useContext(UserContext);
 
   const isHomePage = location.pathname === "/";
-
   return (
     <nav className="navbar">
       {!isHomePage && (
@@ -19,23 +20,29 @@ export const NavBar = ({ isStaff }) => {
       <ul className="nav-links">
         <li>
           <Link to="/events" className="nav-link">
-            Events
+            All Events
           </Link>
         </li>
         <li>
-          <Link to="/calendar" className="nav-link">
-            Calendar
+          <Link to="/my-events" className="nav-link">
+            My Events
           </Link>
         </li>
-        {isStaff && (
-          <li>
-            <Link to="/manage-events" className="nav-link">
-              Manage Events
-            </Link>
-          </li>
+        {loggedInUser && loggedInUser.staff && (
+          <>
+            <li>
+              <Link to="/manage-events" className="nav-link">
+                Manage Events
+              </Link>
+            </li>
+            <li>
+              <Link to="/add-event" className="nav-link">
+                Add Event
+              </Link>
+            </li>
+          </>
         )}
       </ul>
-      <GoogleLoginButton />
     </nav>
   );
 };

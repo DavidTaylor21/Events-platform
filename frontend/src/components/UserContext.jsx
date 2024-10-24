@@ -6,25 +6,33 @@ export const UserProvider = ({ children }) => {
   const [loggedInUser, setLoggedInUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("eventsPlatformUser"));
+    const storedUser = localStorage.getItem("eventsPlatformUser");
     if (storedUser) {
-      setLoggedInUser(storedUser);
+      try {
+        const user = JSON.parse(storedUser);
+        setLoggedInUser(user);
+      } catch (error) {
+        localStorage.removeItem("eventsPlatformUser");
+      }
     }
   }, []);
 
   const login = (userData) => {
     setLoggedInUser(userData);
-    localStorage.setItem("eventsPlatformUser", JSON.stringify(userData)); 
+
+    localStorage.setItem("eventsPlatformUser", JSON.stringify(userData));
   };
 
   const logout = () => {
     setLoggedInUser(null);
-    localStorage.removeItem("eventsPlatformUser"); 
-    console.log("user logged out")
+
+    localStorage.removeItem("eventsPlatformUser");
   };
 
   return (
-    <UserContext.Provider value={{ loggedInUser, login, logout , setLoggedInUser }}>
+    <UserContext.Provider
+      value={{ setLoggedInUser, loggedInUser, login, logout }}
+    >
       {children}
     </UserContext.Provider>
   );

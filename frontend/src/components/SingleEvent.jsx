@@ -7,7 +7,16 @@ import { convertDate } from "../../utils";
 export const SingleEvent = () => {
   const { event_id } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [eventData, setEventData] = useState({});
+  const [eventData, setEventData] = useState({
+    event_name: "",
+    location: "",
+    description: "",
+    price: "0.00",
+    capacity: "",
+    start_time: "",
+    end_time: "",
+    timeZone: "Europe/London",
+  });
   const [error, setError] = useState(null);
   const [signupError, setSignupError] = useState(null);
   const [signupSuccess, setSignupSuccess] = useState(false);
@@ -56,9 +65,14 @@ export const SingleEvent = () => {
       <h2 className="single-event-title">{eventData.event_name}</h2>
       <p className="single-event-details">Location: {eventData.location}</p>
       <p className="single-event-details">
-        Date: {convertDate(eventData.event_time)}
+        Start time: {convertDate(eventData.start_time)} 
       </p>
-      <p className="single-event-price">Price: £{eventData.price}</p>
+      <p className="single-event-details">
+        End time: {convertDate(eventData.end_time)} 
+      </p>
+      <p className="single-event-description">
+        Description: {eventData.description || "No description available."}
+      </p>
       <p className="single-event-capacity">
         Spaces remaining: {eventData.spacesLeft}
       </p>
