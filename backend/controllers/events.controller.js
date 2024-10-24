@@ -130,6 +130,7 @@ export const removeUserFromEvent = (req,res)=>{
       res.status(200).send({ msg: "User successfully removed from event" });
     })
     .catch((err) => {
+     
       if (err.code === "P2025") {
         return res.status(400).send({ msg: "event not found" });
       } else {

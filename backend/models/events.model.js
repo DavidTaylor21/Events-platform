@@ -144,11 +144,14 @@ export const deleteEventById = (eventId) => {
 export const deleteUserFromEvent = (eventId, userId) => {
   const parsedEventId = parseInt(eventId, 10);
   const parsedUserId = parseInt(userId, 10);
-  return prisma.user_events.delete({
-    where: {
-      user_id: parsedUserId,
-      event_id: parsedEventId,
-    },
-  })
-  .then((result) => result)
+  return prisma.user_events
+    .delete({
+      where: {
+        user_id_event_id: {
+          user_id: parsedUserId,
+          event_id: parsedEventId,
+        },
+      },
+    })
+    .then((result) => result);
 };
