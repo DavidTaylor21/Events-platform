@@ -8,7 +8,7 @@ import {
 export const postNewUser = (req, res) => {
   insertNewUser(req.body)
     .then((newUser) => {
-      res.status(201).send({ msg: "New user added", newUser });
+      res.status(201).send({ msg: "New user added", user: newUser });
     })
     .catch((err) => {
       err.msg && err.status
