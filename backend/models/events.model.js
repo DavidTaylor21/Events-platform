@@ -4,14 +4,29 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const insertNewEvent = (body) => {
-  const { event_name, location, description, start_time, end_time, price, capacity, timeZone } = body;
+  const {
+    event_name,
+    location,
+    description,
+    start_time,
+    end_time,
+    price,
+    capacity,
+    timeZone,
+  } = body;
 
   if (!event_name || !location || !start_time || !end_time || !timeZone) {
-    return Promise.reject({ status: 400, msg: "Required content missing from body" });
+    return Promise.reject({
+      status: 400,
+      msg: "Required content missing from body",
+    });
   }
 
   if (new Date(start_time) >= new Date(end_time)) {
-    return Promise.reject({ status: 400, msg: "Start time must be before end time" });
+    return Promise.reject({
+      status: 400,
+      msg: "Start time must be before end time",
+    });
   }
 
   const parsedPrice = price ? parseFloat(price) : null;
@@ -32,9 +47,8 @@ export const insertNewEvent = (body) => {
     })
     .then((newEvent) => {
       return newEvent;
-    })
+    });
 };
-
 
 export const selectAllEvents = () => {
   return prisma.events.findMany().then((events) => {
@@ -126,4 +140,15 @@ export const deleteEventById = (eventId) => {
       console.error("Error deleting event:", err);
       throw err;
     });
+};
+export const deleteUserFromEvent = (eventId, userId) => {
+  const parsedEventId = parseInt(eventId, 10);
+  const parsedUserId = parseInt(userId, 10);
+  return prisma.user_events.delete({
+    where: {
+      user_id: parsedUserId,
+      event_id: parsedEventId,
+    },
+  })
+  .then((result) => result)
 };

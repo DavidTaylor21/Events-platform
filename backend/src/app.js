@@ -4,7 +4,8 @@ import {
   getEventById,
   postUserToEvent,
   patchEvent,
-  deleteEvent
+  deleteEvent,
+  removeUserFromEvent
 } from "../controllers/events.controller.js";
 import {
   postNewUser,
@@ -35,6 +36,7 @@ app.post("/api/events", postNewEvent);
 app.get("/api/events", getAllEvents);
 app.get("/api/events/:id", getEventById);
 app.post("/api/events/:id/register", postUserToEvent);
+app.delete("/api/events/:id/register", removeUserFromEvent)
 app.patch("/api/events/:id", patchEvent);
 app.delete("/api/events/:id", deleteEvent)
 

@@ -5,6 +5,7 @@ import {
   insertUserToEvent,
   editEvent,
   deleteEventById,
+  deleteUserFromEvent
 } from "../models/events.model.js";
 export const postNewEvent = (req, res) => {
   insertNewEvent(req.body)
@@ -121,3 +122,20 @@ export const deleteEvent = (req, res) => {
       }
     });
 };
+export const removeUserFromEvent = (req,res)=>{
+  const eventId = req.params.id
+  const { user_id } = req.body;
+  deleteUserFromEvent(eventId, user_id)
+    .then(() => {
+      res.status(200).send({ msg: "User successfully removed from event" });
+    })
+    .catch((err) => {
+      if (err.code === "P2025") {
+        return res.status(400).send({ msg: "event not found" });
+      } else {
+        return err.msg && err.status
+          ? res.status(err.status).send({ msg: err.msg })
+          : res.status(500).send({ msg: "Error removing user from event" });
+      }
+    });
+  }
