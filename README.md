@@ -1,5 +1,8 @@
 # Events platform
 
+[Visit the hosted site](https://events-platform-dt.netlify.app/) to explore the Events Platform live.
+
+
 ## Summary
 
 **Events platform** is a event management platform designed to connect users with events in their area. The platform allows users to discover, sign up for, and manage events easily. Users can also integrate their Google calendars for event reminders and updates.
