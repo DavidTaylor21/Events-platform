@@ -15,7 +15,7 @@ export const postNewUser = (req, res) => {
       if (err.code === "P2002") {
         return res
           .status(409)
-          .send({ msg: "User already registered for this event" });
+          .send({ msg: "User already exists with this email" });
       } else {
         err.msg && err.status
           ? res.status(err.status).send({ msg: err.msg })
