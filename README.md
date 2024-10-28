@@ -22,6 +22,11 @@ You can explore the platform using the following test account credentials:
 - **Email**: staff@testemail.com
 - **Password**: testpassword
 
+You can login with google using the following test account credentials:
+
+- **Email**: testu4656@gmail.com
+- **Password**: TestPassword123
+
 ---
 
 ## Running the Project Locally
