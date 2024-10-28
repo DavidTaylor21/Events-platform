@@ -266,6 +266,9 @@ h1 {
 }
 
 .event-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
 }
@@ -418,3 +421,16 @@ button:hover {
   background-color: #218838; 
 }
 
+.event-content {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.event-details {
+  flex: 1;
+}
+
+.remove-button {
+  margin-left: auto;
+  padding-left: 20px;
+}

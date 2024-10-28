@@ -17,7 +17,7 @@ export const userLogin = (email, password) => {
   const loginDetails = { email, password };
   return api.post("users/login", loginDetails).then((userData) => {
     return userData.data.user;
-  });
+  })
 };
 export const userRegister = (name, email, password) => {
   const userDetails = { name, email, staff: false, password };
@@ -50,14 +50,13 @@ export const addEvent = (event) => {
 export const deleteUserFromEvent = (eventId, userId) => {
   return api
     .delete(`events/${eventId}/register`, {
-      data: { user_id: userId }, 
+      data: { user_id: userId },
     })
     .then((response) => {
-      return response.data; 
+      return response.data;
     })
     .catch((err) => {
-      console.log(err); 
-      throw err; 
+      console.log(err);
+      throw err;
     });
 };
-

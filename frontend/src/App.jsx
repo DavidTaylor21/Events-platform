@@ -13,7 +13,7 @@ import { ManageEvents } from "./components/ManageEvents";
 import { GoogleLoginButton } from "./components/GoogleLoginButton";
 
 function App() {
-  const { logout, setLoggedInUser , loggedInUser} = useContext(UserContext);
+  const { logout, setLoggedInUser, loggedInUser } = useContext(UserContext);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const userData = localStorage.getItem("eventsPlatformUser");
@@ -28,7 +28,7 @@ function App() {
   const handleLogout = () => {
     logout();
     setIsLoggedIn(false);
-    localStorage.removeItem('googleAccessToken');
+    localStorage.removeItem("googleAccessToken");
   };
   const ProtectedRoute = ({ element }) => {
     return isLoggedIn ? element : <Navigate to="/login" />;
@@ -36,17 +36,18 @@ function App() {
   return (
     <>
       <h1>EVENTS PLATFORM</h1>
-      
+
       {isLoggedIn && (
         <>
-        <GoogleLoginButton/>
-        <button className="logout-button" onClick={handleLogout}>
-          Logout
-        </button>
-        <p>Logged in as {loggedInUser.name}</p>
+          <GoogleLoginButton />
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
+          <p>Logged in as {loggedInUser.name}</p>
+
+          <NavBar />
         </>
       )}
-      <NavBar />
       <Routes>
         <Route
           path="/events"

@@ -25,8 +25,9 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
         setIsLoggedIn(true);
       })
       .catch((err) => {
+        console.log(err)
         setIsLoggingIn(false);
-        setError(err.msg || "An error occurred during login.");
+        setError(err.response.data.msg || "Incorrect email or password. Please check your details and try again.");
       });
   };
 
@@ -43,7 +44,7 @@ export const LoginPage = ({ isLoggedIn, setIsLoggedIn }) => {
       })
       .catch((err) => {
         setIsLoggingIn(false);
-        setError(err.msg || "An error occurred during registration.");
+        setError(err.response.data.msg || "An error occurred during registration. Please try again");
       });
   };
 

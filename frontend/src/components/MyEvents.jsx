@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { getUsersEvents } from '../../api';
+import React, { useState, useEffect, useContext } from "react";
+import { getUsersEvents } from "../../api";
 import { UserContext } from "./UserContext";
-import { convertDate } from '../../utils';
-import { AddEventToGoogle } from './AddEventToGoogle';
+import { convertDate } from "../../utils";
+import { AddEventToGoogle } from "./AddEventToGoogle";
 import { RemoveUserFromEventButton } from "./RemoveUserFromEventButton";
 
 export const MyEvents = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isGoogleLogin, setIsGoogleLogin] = useState(localStorage.getItem('googleAccessToken'));
+  const [isGoogleLogin, setIsGoogleLogin] = useState(
+    localStorage.getItem("googleAccessToken")
+  );
   const { loggedInUser } = useContext(UserContext);
 
   useEffect(() => {
@@ -29,7 +31,9 @@ export const MyEvents = () => {
   }, [loggedInUser]);
 
   const handleRemoveSuccess = (eventId) => {
-    setEvents((prevEvents) => prevEvents.filter((event) => event.id !== eventId));
+    setEvents((prevEvents) =>
+      prevEvents.filter((event) => event.id !== eventId)
+    );
   };
 
   if (loading) {
@@ -49,20 +53,26 @@ export const MyEvents = () => {
         <ul>
           {events.map((event) => (
             <li key={event.id} className="event-item">
-              <h3>{event.title}</h3>
-              <p>{event.description}</p>
-              <p>Date: {convertDate(event.event_time)}</p>
-              <p>Location: {event.location}</p>
-              {isGoogleLogin ? (
-                <AddEventToGoogle event={event} />
-              ) : (
-                <p>Login with Google to add this event to your calendar.</p>
-              )}
-              <RemoveUserFromEventButton 
-                eventId={event.id} 
-                userId={loggedInUser.id} 
-                onSuccess={handleRemoveSuccess} 
-              />
+              <div className="event-content">
+                <div className="event-details">
+                  <h3>{event.title}</h3>
+                  <p>{event.description}</p>
+                  <p>Date: {convertDate(event.start_time)}</p>
+                  <p>Location: {event.location}</p>
+                  {isGoogleLogin ? (
+                    <AddEventToGoogle event={event} />
+                  ) : (
+                    <p>Login with Google to add this event to your calendar.</p>
+                  )}
+                </div>
+                <div className="remove-button">
+                  <RemoveUserFromEventButton
+                    eventId={event.id}
+                    userId={loggedInUser.id}
+                    onSuccess={handleRemoveSuccess}
+                  />
+                </div>
+              </div>
             </li>
           ))}
         </ul>
@@ -70,4 +80,3 @@ export const MyEvents = () => {
     </div>
   );
 };
-
