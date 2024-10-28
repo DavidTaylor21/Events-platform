@@ -17,7 +17,7 @@
 You can explore the platform using the following test account credentials:
 
 - **Email**: staff@testemail.com
-- **Password**: TestPassword123
+- **Password**: testpassword
 
 ---
 
@@ -28,6 +28,20 @@ Follow these instructions to set up the project on your local machine.
 ### Prerequisites
 
 - Ensure you have **Node.js** installed. You can download it from [nodejs.org](https://nodejs.org/).
+- Ensure you have PostgreSQL installed and running
+- Set up a Google Cloud project with OAuth 2.0 Client IDs 
+
+### Setup .env
+
+Create a .env file in the backend folder with:
+
+DATABASE_URL=**your_psql_connection_string**
+
+create a .env file in the frontend folder with:
+
+VITE_GOOGLE_CLIENT_ID=**your_google_client_id**
+VITE_GOOGLE_CLIENT_SECRET=**your_google_client_secret**
+VITE_GOOGLE_REDIRECT_URI=http://localhost:5173/oauthcallback
 
 ### Setup Steps
 
