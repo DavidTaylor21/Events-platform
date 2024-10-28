@@ -8,13 +8,19 @@ import {
 export const postNewUser = (req, res) => {
   insertNewUser(req.body)
     .then((newUser) => {
-      console.log(newUser)
+      console.log(newUser);
       res.status(201).send({ msg: "New user added", user: newUser });
     })
     .catch((err) => {
-      err.msg && err.status
-        ? res.status(err.status).send({ msg: err.msg })
-        : res.status(500).send({ msg: "Internal server error" });
+      if (err.code === "P2002") {
+        return res
+          .status(409)
+          .send({ msg: "User already registered for this event" });
+      } else {
+        err.msg && err.status
+          ? res.status(err.status).send({ msg: err.msg })
+          : res.status(500).send({ msg: "Internal server error" });
+      }
     });
 };
 export const patchUser = (req, res) => {
